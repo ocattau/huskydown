@@ -27,6 +27,9 @@
 %
 % Version history
 %
+% 9.04,02/24/20, added 'no ToC' option for caption:  \caption()[]{etc}
+% 9.03,05/21/19, use \everypar in \@makefntext
+% 9.02,11/22/16, minor changes to style to more closely follow grad school guidelines ( something else )
 % 9.01,03/03/15, rename singlespace to uwsinglespace so no collision with setspace style
 % 9.00,11/13/14, modify for proquest style.  Adjust sample thesis appropriately
 % 8.04,03/06/14, return multi-page abstract to two sided
@@ -77,7 +80,7 @@
 % Documentation is in the companion document (uwthesis.tex)
 %
 
-\ProvidesClass{uwthesis}[2015/03/03]
+\ProvidesClass{uwthesis}[2020/02/24]
 \NeedsTeXFormat{LaTeX2e}
 
 %
@@ -114,7 +117,6 @@
   \@natbibfalse
 \DeclareOption{natbib}% includes natbib package
   {\@natbibtrue}
-
 
 %
 % ----  Thesis is a modified (default 12pt) book style  -----------------
@@ -172,7 +174,7 @@
   \advance\textheight by-\topmargin
   \advance\textheight by-\headheight
   \advance\textheight by-\headsep
-   \advance\textheight by-\footskip
+  % \advance\textheight by-\footskip
   \advance\textheight by-\botmargin
 \textwidth\paperwidth
   \advance\textwidth by-\oddsidemargin
@@ -291,6 +293,7 @@
  \hrule width \columnwidth \kern 2.6\p@}
 \long\def\@makefntext#1{\parindent 1em\noindent \hangindent\parindent
  \uwsinglespace
+ \everypar{\hb@xt@1em{\hss} \hangindent\parindent}
  \hb@xt@1.8em{\hss\@makefnmark}#1}
 
 %
@@ -477,6 +480,7 @@
 % ------ Special captions ---------------------
 %
 % \caption[]{text} produces normal caption and numbering
+% \caption()[]{text} normal caption - no toc entry
 % \caption(-){(continued)} produces `(continued)' caption and
 %        same-as-last caption number
 % \caption(x)[]{text} produces lettered caption.  1.1a, 1.1b, ...
@@ -492,6 +496,7 @@
 \def\@specialcaption(#1){%
   \def\thecaptionletter{#1}%
   \captiontotocfalse
+  \ifx&#1&\refstepcounter\@captype\fi
   \if#1-\def\thecaptionletter{}\fi
   \if#1a\refstepcounter\@captype\captiontotoctrue\fi
   \if#1A\refstepcounter\@captype\captiontotoctrue\fi
@@ -655,11 +660,12 @@
   \global\@namedef{S:\expandafter\the\@Sign}{#1}
   \global\advance\@Sign by1}
 
+
 \def\copyrightpage{                   % Prints the copyright page
     \vspace{7pc}
     \begin{center}
       \par\vskip\z@ plus4fill\relax
-      \textcopyright \: Copyright \@Year
+      \copyright Copyright \@Year
       \par
       \@Author
       \par\vskip\z@ plus2fill\relax
@@ -848,80 +854,4 @@
    \def\makelabel##1{\footnotesize\uppercase{##1:}\hfill}\uwsinglespace}}
   {\end{list}}
 
-%
-%  Colophon
-%
-% %  normal parameters, based on abstract
-% \def\textofColophon#1{\gdef\@textofColophon{#1}}  \textofColophon{Colophon}
-%
-% \newsavebox\col@savebox
-% \long\def\colophon#1{
-%    \cleardoublepage
-%    #1
-%    \vfill\clearpage
-%    \let\colophon\relax}
-% %
-\def\colophon{                   % Prints the colophon page
-    \cleardoublepage
-    \vspace{7pc}
-     \vspace{2pc}\relax
-  \let\colophon\relax}
-
-
 % End of the thesis style
-
-%% Stuff from https://github.com/suchow/Dissertate
-
-
-
-\RequirePackage{color}
-\RequirePackage[tiny, md, sc]{titlesec}
-% \usepackage[hidelinks]{hyperref}
-\setlength{\headheight}{15pt}
-\pagestyle{plain}
-\RequirePackage{titling}
-\RequirePackage[palatino]{quotchap}
-
-\RequirePackage{graphicx}
-\RequirePackage{amssymb}
-\RequirePackage{lettrine}
-
-\RequirePackage{fancyhdr}
-
-\usepackage[titletoc]{appendix}
-\renewcommand{\setthesection}{\arabic{chapter}.A\arabic{section}}
-
-\RequirePackage{setspace}
-\RequirePackage{booktabs}
-\RequirePackage[tight,nice]{units}
-\RequirePackage{verbatim}
-\setcounter{tocdepth}{2}
-% controls depth of numbering in the table of contents (toc):
-% 0 = chapter => only chapters are numbered
-% 1 = section => chapters and sections are numbered
-% 2 = subsection  => chapters, sections and subsection are numbered
-
- \RequirePackage{url}
- \usepackage[titles]{tocloft}
-\setlength{\cftchapnumwidth}{10em}
-\setlength{\cftsubsecnumwidth}{10em}
- \renewcommand\cftpartnumwidth{10em}
- \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
- \renewcommand{\cftchapfont}{\normalsize \scshape}
- \usepackage{ragged2e}
-
-
-\RequirePackage{mathspec}
-\setmathsfont(Digits,Latin,Greek)[Numbers={Proportional}]{EB Garamond}
-\setmathrm{EB Garamond}
-
-
-\defaultfontfeatures{Mapping=tex-text}
-\newfontfamily{\smallcaps}[RawFeature={c2sc,scmp}]{EB Garamond}
-\defaultfontfeatures{Ligatures=TeX}
-%% \setmainfont[Numbers=OldStyle, Contextuals=Alternate, Ligatures={Common, Rare, Historical}]{EB Garamond}
-\setmainfont[Numbers=OldStyle, Contextuals=Alternate, Ligatures={Common}]{EB Garamond}
-\setsansfont[Scale=MatchLowercase, BoldFont={Lato Bold}]{Lato Regular}
-\setmonofont[Scale=MatchLowercase]{Source Code Pro}
-
-

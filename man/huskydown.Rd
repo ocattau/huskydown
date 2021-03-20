@@ -3,10 +3,5 @@
 \docType{package}
 \name{huskydown}
 \alias{huskydown}
-\alias{huskydown-package}
 \title{huskydown: A package for creating undergraduate, Masters, and PhD theses
 using R Markdown}
-\description{
-huskydown: A package for creating undergraduate, Masters, and PhD theses
-using R Markdown
-}

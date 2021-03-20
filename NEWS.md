@@ -1,3 +1,7 @@
+# huskydown 0.0.5
+
+- remove custom highlighting
+- make pandoc args available
 
 # huskydown 0.0.4
 
